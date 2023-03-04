@@ -31,8 +31,12 @@ public class Prueva extends JPanel{
            boolean otro = true;
 	//pierna derecha
 	 int [] XcorPier1={135, 350,30,100};
+         Shape pierna1 = new Rectangle2D.Double(XcorPier1[0], XcorPier1[1],XcorPier1[2], XcorPier1[3]);
+         Shape pierna1Original = new Rectangle2D.Double(XcorPier1[0], XcorPier1[1],XcorPier1[2], XcorPier1[3]);
 	//pierna izquierda
-		 int [] XcorPier2={185, 350,30,100};
+        int [] XcorPier2={185, 350,30,100};
+         Shape pierna2 = new Rectangle2D.Double(XcorPier2[0], XcorPier2[1],XcorPier2[2], XcorPier2[3]);
+         Shape pierna2Original = new Rectangle2D.Double(XcorPier2[0], XcorPier2[1],XcorPier2[2], XcorPier2[3]);
 	 //cabeza
 	 int [] XcorCabeza={150, 150,50,50};
         // Rectangle cabeza = new Rectangle(XcorCabeza[0], XcorCabeza[1],XcorCabeza[2], XcorCabeza[3]);
@@ -107,6 +111,8 @@ AffineTransform transform = new AffineTransform();
 		                	 dyes = e.getY()-Circulo3[1];
 		                }if((x >= XcorBraso1[0] && x <= XcorBraso1[0] + XcorBraso1[2] && y >= XcorBraso1[1] && y <= XcorBraso1[1] + XcorBraso1[3])){
                                              System.out.println("El cursor está pulsando el braso izquierdo");
+                                             pierna1 = pierna1Original;
+                                             pierna2 = pierna2Original;
                                              rectangle = CabezaOriginal;
                                              torzo = torzoOriginal;
                                              braso1 = braso1Orignal;
@@ -121,6 +127,8 @@ AffineTransform transform = new AffineTransform();
                                              puntoArrastre = e.getPoint();
                                 }else if((x >= XcorBraso2[0] && x <= XcorBraso2[0] + XcorBraso2[2] && y >= XcorBraso2[1] && y <= XcorBraso2[1] + XcorBraso2[3])){
                                              System.out.println("El cursor está pulsando el braso derecho");
+                                             pierna1 = pierna1Original;
+                                             pierna2 = pierna2Original;
                                              rectangle = CabezaOriginal;
                                              torzo = torzoOriginal;
                                              braso1 = braso1Orignal;
@@ -177,7 +185,9 @@ AffineTransform transform = new AffineTransform();
 		            	    	        Circulo3[0]+=dx;
 		            	    	        Circulo4[1]+=dy;
 		            	    	        Circulo4[0]+=dx;
-                                                    
+                                                    //se aplica el cambio de la figura para las nuevas trasformaciones
+                                                pierna1Original = new Rectangle2D.Double(XcorPier1[0], XcorPier1[1],XcorPier1[2], XcorPier1[3]);
+                                                pierna2Original = new Rectangle2D.Double(XcorPier2[0], XcorPier2[1],XcorPier2[2], XcorPier2[3]);
                                                 CabezaOriginal = new Rectangle2D.Double(XcorCabeza[0], XcorCabeza[1],XcorCabeza[2], XcorCabeza[3]);
                                                 torzoOriginal = new Rectangle2D.Double(XcorTorzo[0], XcorTorzo[1],XcorTorzo[2], XcorTorzo[3]);
                                                 braso1Orignal = new Rectangle2D.Double(XcorBraso1[0], XcorBraso1[1],XcorBraso1[2], XcorBraso1[3]);
@@ -232,25 +242,24 @@ AffineTransform transform = new AffineTransform();
                                                     // Crear una figura, en este caso un rectángulo
                                                     
                                                      
-                                                    // Aplicar la transformación al rectángulo
+                                                    // Aplicar la transformación a las figuras
+                                                     pierna1 = transform.createTransformedShape(pierna1);
+                                                     pierna2 = transform.createTransformedShape(pierna2);
                                                      rectangle = transform.createTransformedShape(rectangle);
                                                      torzo = transform.createTransformedShape(torzo);
                                                      braso1 = transform.createTransformedShape(braso1);
                                                      braso2 = transform.createTransformedShape(braso2);
                                                      braso3 = transform.createTransformedShape(braso3);
                                                      braso4 = transform.createTransformedShape(braso4);
-                                                     
-                                                    
-                                                    
-                 
-                                                    
   
-                 	       
                                                 } 
                                                  if(TipoDeSesgado.equals("derecho")) {
                                                     
                                                      System.out.println("entro aqui a la derecha");
-                                                      transform.shear(0.000009, 0);
+                                                     transform.shear(0.000009, 0);
+                                                     
+                                                      pierna1 = transform.createTransformedShape(pierna1);
+                                                     pierna2 = transform.createTransformedShape(pierna2);
                                                      rectangle = transform.createTransformedShape(rectangle);
                                                      torzo = transform.createTransformedShape(torzo);
                                                      braso1 = transform.createTransformedShape(braso1);
@@ -304,6 +313,12 @@ AffineTransform transform = new AffineTransform();
                     
                     g2d.setColor(new Color(250, 227, 148));
                     g2d.fill (braso4);
+                    
+                    g2d.setColor(Color.RED);
+                    g2d.fill (pierna1);
+                    
+                    g2d.setColor(Color.RED);
+                    g2d.fill (pierna2);
                     
                     
                     
