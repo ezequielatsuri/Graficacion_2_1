@@ -1,11 +1,9 @@
-package bidimensional;
+package graficacion_2_1;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -28,8 +26,8 @@ public class Prueva extends JPanel{
 	 * */
     
          //banaderas
-           boolean sesgado = false;
-           boolean otro = true;
+         boolean sesgado = false;
+         boolean otro = true;
 	//pierna derecha
 	 int [] XcorPier1={135, 350,30,100};
          Shape pierna1 = new Rectangle2D.Double(XcorPier1[0], XcorPier1[1],XcorPier1[2], XcorPier1[3]);
@@ -74,13 +72,15 @@ public class Prueva extends JPanel{
 		 
 		 int dyes;
 		 int x,y; 
-		 double factorEscala=1.0;
+		 private int lastX;
 		 String TipoDeTranformacion="null";
                  String TipoDeSesgado = "null";
 		 private Point puntoArrastre;
+		 
                  // Creamos una instancia de la clase AffineTransform
                // Crear una instancia de AffineTransform
 AffineTransform transform = new AffineTransform();
+
 
 // Aplicar una transformación de sesgo
 
@@ -96,41 +96,43 @@ AffineTransform transform = new AffineTransform();
 		                //esta condicion verifica que este en el area del torzo para hacer la rotación 
                                 //x >= XcorTorzo[0] && x <= XcorTorzo[0] + XcorTorzo[2] && y >= XcorTorzo[1] && y <= XcorTorzo[1] + XcorTorzo[3]
 		                if (torzo.contains(x, y)) {
-		                    System.out.println("El cursor está pulsando el torso");
+		                    
 		                    TipoDeTranformacion ="traslacion";
 		                    //se establece el punto de inicio
 		                    puntoArrastre = e.getPoint();
 		                }
 		                if (circuloEscalamiento.contains(x, y)) {
 		                	
-		                	System.out.println("El cursor está dentro de un círculo de escalamiento");
+		                
 		                	 TipoDeTranformacion="Escalamiento";
+		                	  lastX= e.getX();
 		                	 puntoArrastre = e.getPoint();
 		                	 
 		                }
                                 if(circuloRotacion.contains(x, y)){
-                                    System.out.println("El cursor está dentro de un círculo de rotacion");
+                                   
 		                	 TipoDeTranformacion="Rotacion";
+		                	 lastX= e.getX();
 		                	 puntoArrastre = e.getPoint();
                                 
                                 }
                                 
                                 if(braso1.contains(x, y)){
-                                             System.out.println("El cursor está pulsando el braso izquierdo");
+                                             
                                              
                                              TipoDeTranformacion ="Sesgado";
                                              TipoDeSesgado = "izquierda";
                                              //se establece el punto de inicio
                                              puntoArrastre = e.getPoint();
                                 }else if(braso2.contains(x, y)){
-                                             System.out.println("El cursor está pulsando el braso derecho");
+                                             
                                              
                                              TipoDeTranformacion ="Sesgado";
                                              TipoDeSesgado = "derecho";
                                              //se establece el punto de inicio
                                              puntoArrastre = e.getPoint();
                                 }else if(cabeza.contains(x, y)){
-                                    System.out.println("El cursor está pulsando en la cabeza");
+                                   
                                              
                                              TipoDeTranformacion ="Sesgado";
                                              TipoDeSesgado = "arriba";
@@ -138,7 +140,7 @@ AffineTransform transform = new AffineTransform();
                                              puntoArrastre = e.getPoint();
                                 
                                 }else if(pierna1.contains(x, y) || pierna2.contains(x, y)){
-                                    System.out.println("El cursor está pulsando en las piernas");
+                                    
                                              
                                              TipoDeTranformacion ="Sesgado";
                                              TipoDeSesgado = "abajo"; 
@@ -162,7 +164,7 @@ AffineTransform transform = new AffineTransform();
 		            	    	 if (TipoDeTranformacion.equals("traslacion")) {
 		            	    		int dx = e.getX() - puntoArrastre.x;
 		            	    	        int dy = e.getY() - puntoArrastre.y;
-                                                System.out.println("entro a traslacion");
+                                               
                                                 
                                                 transform.translate(dx, dy);
 
@@ -185,15 +187,37 @@ AffineTransform transform = new AffineTransform();
 		            	    	        repaint();
 		            	    	 }else if (TipoDeTranformacion.equals("Escalamiento")) {
 		            	    		
-		            	    		 //escalamiento con el metodo  AffineTransform 
-		            	    		 
+		            	    		 int x = e.getX();
+		            	    		    int y = e.getY();
+
+		            	    		    // Luego, puedes hacer una comparación para determinar si el mouse se está moviendo hacia la izquierda o hacia la derecha, por ejemplo
+		            	    		    if (x > lastX) {
+		            	    		        // El mouse se está moviendo hacia la derecha
+		            	    		        transform.scale(1.05, 1.05); // Escalado hacia arriba
+		            	    		    } else if (x < lastX) {
+		            	    		        // El mouse se está moviendo hacia la izquierda
+		            	    		        transform.scale(0.95, 0.95); // Escalado hacia abajo
+		            	    		    }
+		            	    		    lastX = x;
+		            	    		 // Actualiza las formas transformadas y repinta el componente
+		            	    		    pierna1 = transform.createTransformedShape(pierna1Original);
+		            	    		    pierna2 = transform.createTransformedShape(pierna2Original);
+		            	    		    cabeza = transform.createTransformedShape(cabezaOriginal);
+		            	    		    torzo = transform.createTransformedShape(torzoOriginal);
+		            	    		    braso1 = transform.createTransformedShape(braso1Original);
+		            	    		    braso2 = transform.createTransformedShape(braso2Original);
+		            	    		    braso3 = transform.createTransformedShape(braso3Original);
+		            	    		    braso4 = transform.createTransformedShape(braso4Original);
+		            	    		    circuloRotacion = transform.createTransformedShape(circuloRotacionOriginal);
+		            	    		    circuloEscalamiento = transform.createTransformedShape(circuloEscalamientoOriginal);
+		            	    		    repaint();
 		            	    		
 		            	    	 }else if (TipoDeTranformacion.equals("Sesgado")) {
                                              
-                                             System.out.println("entro al sesgado");
+                                             
                                              
                                                  if (TipoDeSesgado.equals("izquierda")) {
-                                                     System.out.println("entro aqui a la izquierda");
+                                                     
                                                      transform.shear(-0.005, 0);
 
                                                     // Crear una figura, en este caso un rectángulo
@@ -213,7 +237,7 @@ AffineTransform transform = new AffineTransform();
   
                                                 } else if(TipoDeSesgado.equals("derecho")) {
                                                     
-                                                     System.out.println("entro aqui a la derecha");
+                                                    
                                                      transform.shear(0.005, 0);
                                                      
                                                        // Aplicar la transformación a las figuras
@@ -230,7 +254,7 @@ AffineTransform transform = new AffineTransform();
                                                      
                                                    
                                                 }else if(TipoDeSesgado.equals("arriba")){
-                                                    System.out.println("entro aqui arriba");
+                                                    
                                                      transform.shear(0, 0.005);
                                                      
                                                        // Aplicar la transformación a las figuras
@@ -246,7 +270,7 @@ AffineTransform transform = new AffineTransform();
                                                      circuloEscalamiento = transform.createTransformedShape(circuloEscalamientoOriginal);
                                                 
                                                 }else if(TipoDeSesgado.equals("abajo")){
-                                                    System.out.println("entro aqui abajo");
+                                                  
                                                      transform.shear(0, -0.005);
                                                      
                                                        // Aplicar la transformación a las figuras
@@ -265,21 +289,34 @@ AffineTransform transform = new AffineTransform();
                                          
                                          }else if (TipoDeTranformacion.equals("Rotacion")) {
                                              //Rotacion con el metodo AffineTransform 
-                                         
-                                         }
-		            	    	             	    
-		            	  
-		            	   
-		            	  
-		            	  
-		            	 //  repaint();
-		            	    
-		                  
+                                        	 int mouseX = e.getX();
+                                        	 if (mouseX > lastX) {
+                                                 // Mover hacia la derecha, rotar en sentido horario
+                                                 transform.rotate(Math.toRadians(-1));
+                                             } else if (mouseX < lastX) {
+                                                 // Mover hacia la izquierda, rotar en sentido antihorario
+                                                 transform.rotate(Math.toRadians(1));
+                                             }
 
+                                             lastX = mouseX;
+                                             pierna1 = transform.createTransformedShape(pierna1Original);
+     		            	    		    pierna2 = transform.createTransformedShape(pierna2Original);
+     		            	    		    cabeza = transform.createTransformedShape(cabezaOriginal);
+     		            	    		    torzo = transform.createTransformedShape(torzoOriginal);
+     		            	    		    braso1 = transform.createTransformedShape(braso1Original);
+     		            	    		    braso2 = transform.createTransformedShape(braso2Original);
+     		            	    		    braso3 = transform.createTransformedShape(braso3Original);
+     		            	    		    braso4 = transform.createTransformedShape(braso4Original);
+     		            	    		    circuloRotacion = transform.createTransformedShape(circuloRotacionOriginal);
+     		            	    		    circuloEscalamiento = transform.createTransformedShape(circuloEscalamientoOriginal);
+     		            	    		    repaint();
+                                         }
+		            	    	             	   
 		            }
 		        });
 		 }
 
+           @Override
 	        public void paintComponent(Graphics g) {
 	        super.paintComponent(g);
 
@@ -332,3 +369,4 @@ AffineTransform transform = new AffineTransform();
 	
 
 }
+
