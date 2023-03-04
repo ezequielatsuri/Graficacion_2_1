@@ -1,6 +1,6 @@
 # Graficacion_2_1
 
-#Progrma que realiza las transformaciones bidimensionales que se listan a continuación
+Programa que realiza las transformaciones bidimensionales que se listan a continuación
 
 rotación
 traslación
