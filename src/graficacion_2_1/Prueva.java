@@ -25,6 +25,10 @@ public class Prueva extends JPanel{
 	 * pocicion 2 = ancho
 	 * pocicion 3 = largo
 	 * */
+    
+         //banaderas
+           boolean sesgado = false;
+           boolean otro = true;
 	//pierna derecha
 	 int [] XcorPier1={135, 350,30,100};
 	//pierna izquierda
@@ -36,13 +40,23 @@ public class Prueva extends JPanel{
          Shape CabezaOriginal = new Rectangle2D.Double(XcorCabeza[0], XcorCabeza[1],XcorCabeza[2], XcorCabeza[3]);
 	 //torzo
 	 int [] XcorTorzo={120, 200,110,150};
+         Shape torzo = new Rectangle2D.Double(XcorTorzo[0], XcorTorzo[1],XcorTorzo[2], XcorTorzo[3]);
+         Shape torzoOriginal = new Rectangle2D.Double(XcorTorzo[0], XcorTorzo[1],XcorTorzo[2], XcorTorzo[3]);
 	//brazo derecho Del muñeco no de nosostros 
 	 int [] XcorBraso1 = {90, 200,30,80};
+         Shape braso1 = new Rectangle2D.Double(XcorBraso1[0], XcorBraso1[1],XcorBraso1[2], XcorBraso1[3]);
+         Shape braso1Orignal = new Rectangle2D.Double(XcorBraso1[0], XcorBraso1[1],XcorBraso1[2], XcorBraso1[3]);
 	 
 	 int [] XcorBraso3={95, 280,20,20};
+         Shape braso3 = new Rectangle2D.Double(XcorBraso3[0], XcorBraso3[1],XcorBraso3[2], XcorBraso3[3]);
+         Shape braso3Orignal = new Rectangle2D.Double(XcorBraso3[0], XcorBraso3[1],XcorBraso3[2], XcorBraso3[3]);
 	 //brazo Izquierdo
 		 int [] XcorBraso2={230, 200,30,80};
+                 Shape braso2 = new Rectangle2D.Double(XcorBraso2[0], XcorBraso2[1],XcorBraso2[2], XcorBraso3[3]);
+                 Shape braso2Orignal = new Rectangle2D.Double(XcorBraso2[0], XcorBraso2[1],XcorBraso2[2], XcorBraso2[3]);
 		 int [] XcorBraso4={235, 280,20,20};
+                 Shape braso4 = new Rectangle2D.Double(XcorBraso4[0], XcorBraso4[1],XcorBraso4[2], XcorBraso4[3]);
+                 Shape braso4Orignal = new Rectangle2D.Double(XcorBraso4[0], XcorBraso4[1],XcorBraso4[2], XcorBraso4[3]);
 		 //creamos dimenciones para 5 circulos para poder hacer el escalamiento y rotación 
 		 //circulo superior izquierdo
 		 int [] Circulo={90,130,10,10};
@@ -71,9 +85,12 @@ AffineTransform transform = new AffineTransform();
 		                y=e.getY();
 		                //creamos 4 condiciones para saber donde se encuentra el cursor y apartir de eso sabemos que vamos hacer
 		                //esta condicion verifica que este en el area del torzo para hacer la rotación 
-		                if (x >= XcorTorzo[0] && x <= XcorTorzo[0] + XcorTorzo[2] && y >= XcorTorzo[1] && y <= XcorTorzo[1] + XcorTorzo[3]) {
+                                //x >= XcorTorzo[0] && x <= XcorTorzo[0] + XcorTorzo[2] && y >= XcorTorzo[1] && y <= XcorTorzo[1] + XcorTorzo[3]
+		                if (torzo.contains(x, y)) {
 		                    System.out.println("El cursor está pulsando el torso");
 		                    TipoDeTranformacion ="traslacion";
+                                    sesgado = false;
+                                    otro = true;
 		                    //se establece el punto de inicio
 		                    puntoArrastre = e.getPoint();
 		                }
@@ -84,18 +101,34 @@ AffineTransform transform = new AffineTransform();
 		                	
 		                	System.out.println("El cursor está dentro de un círculo");
 		                	 TipoDeTranformacion="Escalamiento";
+                                         sesgado = false;
+                                         otro = true;
 		                	 puntoArrastre = e.getPoint();
 		                	 dyes = e.getY()-Circulo3[1];
 		                }if((x >= XcorBraso1[0] && x <= XcorBraso1[0] + XcorBraso1[2] && y >= XcorBraso1[1] && y <= XcorBraso1[1] + XcorBraso1[3])){
                                              System.out.println("El cursor está pulsando el braso izquierdo");
                                              rectangle = CabezaOriginal;
+                                             torzo = torzoOriginal;
+                                             braso1 = braso1Orignal;
+                                             braso2 = braso2Orignal;
+                                             braso3 = braso3Orignal;
+                                             braso4 = braso4Orignal;
                                              TipoDeTranformacion ="Sesgado";
+                                             sesgado = true;
+                                             otro = false;
                                              TipoDeSesgado = "izquierda";
                                              //se establece el punto de inicio
                                              puntoArrastre = e.getPoint();
                                 }else if((x >= XcorBraso2[0] && x <= XcorBraso2[0] + XcorBraso2[2] && y >= XcorBraso2[1] && y <= XcorBraso2[1] + XcorBraso2[3])){
                                              System.out.println("El cursor está pulsando el braso derecho");
                                              rectangle = CabezaOriginal;
+                                             torzo = torzoOriginal;
+                                             braso1 = braso1Orignal;
+                                             braso2 = braso2Orignal;
+                                             braso3 = braso3Orignal;
+                                             braso4 = braso4Orignal;
+                                             sesgado = true;
+                                             otro = false;
                                              TipoDeTranformacion ="Sesgado";
                                              TipoDeSesgado = "derecho";
                                              //se establece el punto de inicio
@@ -117,7 +150,14 @@ AffineTransform transform = new AffineTransform();
 		            	    	 if (TipoDeTranformacion.equals("traslacion")) {
 		            	    		int dx = e.getX() - puntoArrastre.x;
 		            	    	        int dy = e.getY() - puntoArrastre.y;
-
+                                                
+                                                
+                                                CabezaOriginal = new Rectangle2D.Double(XcorCabeza[0], XcorCabeza[1],XcorCabeza[2], XcorCabeza[3]);
+                                                torzoOriginal = new Rectangle2D.Double(XcorTorzo[0], XcorTorzo[1],XcorTorzo[2], XcorTorzo[3]);
+                                                braso1Orignal = new Rectangle2D.Double(XcorBraso1[0], XcorBraso1[1],XcorBraso1[2], XcorBraso1[3]);
+                                                braso3Orignal = new Rectangle2D.Double(XcorBraso3[0], XcorBraso3[1],XcorBraso3[2], XcorBraso3[3]);
+                                                braso2Orignal = new Rectangle2D.Double(XcorBraso2[0], XcorBraso2[1],XcorBraso2[2], XcorBraso2[3]);
+                                                braso4Orignal = new Rectangle2D.Double(XcorBraso4[0], XcorBraso4[1],XcorBraso4[2], XcorBraso4[3]);
 		            	    	        // Actualizamos las coordenadas del torso sumando el desplazamiento
 		            	    	        XcorTorzo[0] += dx;
 		            	    	        XcorTorzo[1] += dy;
@@ -149,7 +189,7 @@ AffineTransform transform = new AffineTransform();
 		            	    	        
 		            	    	        repaint();
 		            	    	 }else if (TipoDeTranformacion.equals("Escalamiento")) {
-		            	    		 int dx = e.getX() - puntoArrastre.x;
+		            	    		int dx = e.getX() - puntoArrastre.x;
 		            	    	        int dy = e.getY() - puntoArrastre.y;
 		            	    		 int dye = e.getY()-Circulo3[1];
 		            	    		 if(x >= Circulo3[0] && x <= Circulo3[0] + Circulo3[2] && y >= Circulo3[1] && y <= Circulo3[1] + Circulo3[3]) {
@@ -186,24 +226,39 @@ AffineTransform transform = new AffineTransform();
                                              
                                                  if (TipoDeSesgado.equals("izquierda")) {
                                                      System.out.println("entro aqui a la izquierda");
-                                                     transform.shear(-0.0001, 0);
+                                                     transform.shear(-0.000009, 0);
 
                                                     // Crear una figura, en este caso un rectángulo
                                                     
                                                      
                                                     // Aplicar la transformación al rectángulo
                                                      rectangle = transform.createTransformedShape(rectangle);
+                                                     torzo = transform.createTransformedShape(torzo);
+                                                     braso1 = transform.createTransformedShape(braso1);
+                                                     braso2 = transform.createTransformedShape(braso2);
+                                                     braso3 = transform.createTransformedShape(braso3);
+                                                     braso4 = transform.createTransformedShape(braso4);
+                                                     
                                                     
                                                     
                  
                                                     
   
                  	       
-                                                } else if(TipoDeSesgado.equals("derecho")) {
+                                                } 
+                                                 if(TipoDeSesgado.equals("derecho")) {
                                                     
                                                      System.out.println("entro aqui a la derecha");
-                                                      transform.shear(0.0001, 0);
+                                                      transform.shear(0.000009, 0);
                                                      rectangle = transform.createTransformedShape(rectangle);
+                                                     torzo = transform.createTransformedShape(torzo);
+                                                     braso1 = transform.createTransformedShape(braso1);
+                                                     braso2 = transform.createTransformedShape(braso2);
+                                                     braso3 = transform.createTransformedShape(braso3);
+                                                     braso4 = transform.createTransformedShape(braso4);
+                                                     
+                                                     
+                                                     
                                                     //xCoords[0] += dx-xCoords[0];
                                                     //xCoords[1] += (dx-xCoords[1])+100;
                                                     
@@ -230,10 +285,33 @@ AffineTransform transform = new AffineTransform();
 	        Graphics2D g2d = (Graphics2D) g;
 	        
 	        //cabeza
-	        g2d.setColor(new Color(250, 227, 148));
-	        g2d.fill (rectangle);
-	        
-	        //torzo
+                if(sesgado == true){
+                    g2d.setColor(new Color(250, 227, 148));
+                    g2d.fill (rectangle);
+                    
+                    g2d.setColor(new Color(75, 238, 4));
+                    g2d.fill (torzo);
+                    
+                    g2d.setColor(new Color(112, 249, 52));
+                    g2d.fill (braso1);
+                    
+                    g2d.setColor(new Color(250, 227, 148));
+                    g2d.fill (braso3);
+                    
+                    g2d.setColor(new Color(112, 249, 52));
+                    g2d.fill (braso2);
+                    
+                    g2d.setColor(new Color(250, 227, 148));
+                    g2d.fill (braso4);
+                    
+                    
+                    
+                    
+                }else if(otro == true){
+                   //cabeza 
+                    g2d.setColor(new Color(250, 227, 148));
+                    g2d.fillRect (XcorCabeza[0], XcorCabeza[1], XcorCabeza[2], XcorCabeza[3]);
+                    //torzo
 	        g2d.setColor(new Color(75, 238, 4));
 	        g2d.fillRect (XcorTorzo[0], XcorTorzo[1], XcorTorzo[2], XcorTorzo[3]);
 	        
@@ -268,6 +346,13 @@ AffineTransform transform = new AffineTransform();
 	        g2d.fillOval (Circulo3[0], Circulo3[1], Circulo3[2], Circulo3[3]);
 	        g2d.setColor(Color.black);
 	        g2d.fillOval (Circulo4[0], Circulo4[1], Circulo4[2], Circulo4[3]);
+                
+                
+                }
+                
+	        
+	        
+	        
 	    }	 
 
 	    public static void main(String[] args) {
