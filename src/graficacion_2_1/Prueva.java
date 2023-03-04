@@ -152,12 +152,7 @@ AffineTransform transform = new AffineTransform();
 		            	    	        int dy = e.getY() - puntoArrastre.y;
                                                 
                                                 
-                                                CabezaOriginal = new Rectangle2D.Double(XcorCabeza[0], XcorCabeza[1],XcorCabeza[2], XcorCabeza[3]);
-                                                torzoOriginal = new Rectangle2D.Double(XcorTorzo[0], XcorTorzo[1],XcorTorzo[2], XcorTorzo[3]);
-                                                braso1Orignal = new Rectangle2D.Double(XcorBraso1[0], XcorBraso1[1],XcorBraso1[2], XcorBraso1[3]);
-                                                braso3Orignal = new Rectangle2D.Double(XcorBraso3[0], XcorBraso3[1],XcorBraso3[2], XcorBraso3[3]);
-                                                braso2Orignal = new Rectangle2D.Double(XcorBraso2[0], XcorBraso2[1],XcorBraso2[2], XcorBraso2[3]);
-                                                braso4Orignal = new Rectangle2D.Double(XcorBraso4[0], XcorBraso4[1],XcorBraso4[2], XcorBraso4[3]);
+                                                
 		            	    	        // Actualizamos las coordenadas del torso sumando el desplazamiento
 		            	    	        XcorTorzo[0] += dx;
 		            	    	        XcorTorzo[1] += dy;
@@ -182,7 +177,13 @@ AffineTransform transform = new AffineTransform();
 		            	    	        Circulo3[0]+=dx;
 		            	    	        Circulo4[1]+=dy;
 		            	    	        Circulo4[0]+=dx;
-
+                                                    
+                                                CabezaOriginal = new Rectangle2D.Double(XcorCabeza[0], XcorCabeza[1],XcorCabeza[2], XcorCabeza[3]);
+                                                torzoOriginal = new Rectangle2D.Double(XcorTorzo[0], XcorTorzo[1],XcorTorzo[2], XcorTorzo[3]);
+                                                braso1Orignal = new Rectangle2D.Double(XcorBraso1[0], XcorBraso1[1],XcorBraso1[2], XcorBraso1[3]);
+                                                braso3Orignal = new Rectangle2D.Double(XcorBraso3[0], XcorBraso3[1],XcorBraso3[2], XcorBraso3[3]);
+                                                braso2Orignal = new Rectangle2D.Double(XcorBraso2[0], XcorBraso2[1],XcorBraso2[2], XcorBraso2[3]);
+                                                braso4Orignal = new Rectangle2D.Double(XcorBraso4[0], XcorBraso4[1],XcorBraso4[2], XcorBraso4[3]);
 		            	    	        // Actualizamos el punto de arrastre
 		            	    	        puntoArrastre = e.getPoint();
 		            	    	        
